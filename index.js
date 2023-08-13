@@ -12,8 +12,6 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.e5zetpl.mongodb.net/?retryWrites=true&w=majority`;
 
-console.log(uri);
-
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -29,7 +27,7 @@ async function run() {
 
     const db = client.db("book-catalog");
     const bookCollection = db.collection("book");
-    console.log("DB connect successfully! ");
+    // console.log("DB connect successfully! ");
 
     // API
     app.get("/books", async (req, res) => {
@@ -47,28 +45,17 @@ async function run() {
       const id = req.params.id;
 
       const result = await bookCollection.findOne({ _id: new ObjectId(id) });
-      console.log(result);
+
       res.send(result);
     });
     app.get("/all-book/:id", async (req, res) => {
       const id = req.params.id;
 
       const result = await bookCollection.findOne({ _id: new ObjectId(id) });
-      console.log(result);
+
       res.send(result);
     });
 
-    /* app.put("/edit-book/:id", async (req, res) => {
-      const id = req.params.id;
-
-      const body = req.body;
-
-      const result = await bookCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: { body } }
-      );
-      res.send(result);
-    }); */
     app.put("/edit-book/:id", async (req, res) => {
       const id = req.params.id;
       const { title, author, genre, img, publication_date } = req.body; // Assuming your book has fields: title, author, and genre.
@@ -94,16 +81,13 @@ async function run() {
 
     app.post("/book", async (req, res) => {
       const book = req.body;
-      console.log(book);
       const result = await bookCollection.insertOne(book);
       res.send(result);
     });
 
     app.delete("/book/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
       const result = await bookCollection.deleteOne({ _id: new ObjectId(id) });
-      console.log(result);
       res.send(result);
     });
 
@@ -111,15 +95,15 @@ async function run() {
       const productId = req.params.id;
       const review = req.body.review;
 
-      console.log(productId);
-      console.log(review);
+      // console.log(productId);
+      // console.log(review);
 
       const result = await bookCollection.updateOne(
         { _id: new ObjectId(productId) },
         { $push: { reviews: review } }
       );
 
-      console.log(result);
+      // console.log(result);
 
       if (result.modifiedCount !== 1) {
         console.error("Product not found or comment not added");
@@ -127,7 +111,7 @@ async function run() {
         return;
       }
 
-      console.log("review added successfully");
+      // console.log("review added successfully");
       res.json({ message: "review added successfully" });
     });
 
@@ -153,7 +137,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello Book Catalog!");
+  res.send("Hello Book Catalog API - books, all-books!");
 });
 
 app.listen(port, () => {
