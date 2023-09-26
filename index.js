@@ -31,10 +31,12 @@ async function run() {
 
     // API
     app.get("/books", async (req, res) => {
-      const cursor = bookCollection.find({}).sort({ _id: -1 }).limit(10);
+      const cursor = bookCollection.find({});
       const books = await cursor.toArray();
       res.send({ data: books });
     });
+    // .sort({ _id: -1 }).limit(10)
+
     app.get("/all-books", async (req, res) => {
       const cursor = bookCollection.find({});
       const books = await cursor.toArray();
