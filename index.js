@@ -9,7 +9,10 @@ const cors = require("cors");
 // middleware
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://serene-biscochitos-74650d.netlify.app",
+    ],
   })
 );
 app.use(express.json());
